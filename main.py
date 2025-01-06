@@ -5,53 +5,103 @@ import tkinter.font as tkFont
 from tkinter import *    # 图形界面库
 import tkinter.messagebox as messagebox    # 弹窗
 
+
+class MainApp(tk.Tk):
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
+        self.title('大学信息管理系统')
+        self.geometry('1920x1080')  # 这里的乘是小x
+
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+
+        self.frames = {}
+
+        for F in ( StartPage,AdminPage, StudentPage, AdminManage, Student,  Lesson, Learn,  StudentView):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.show_frame("StartPage")
+
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
 # 开始界面
-class StartPage:
-    def __init__(self, parent_window):
-        parent_window.destroy()  # 销毁子界面,从别处返回后销毁原界面
+class StartPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
 
-        self.window = tk.Tk()  # 初始框的声明
-        self.window.title('大学信息管理系统')
-        self.window.geometry('1920x1080')  # 这里的乘是小x
+        label = Label(self, text="大学信息管理系统", font=("Verdana", 20))
+        label.pack(pady=100)
 
-        label = Label(self.window, text="大学信息管理系统", font=("Verdana", 20))
-        label.pack(pady=100)  # pady=100 界面的长度
+        Button(self, text="管理员登录", font=tkFont.Font(size=16), command=lambda: controller.show_frame("AdminPage"), width=30, height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+        Button(self, text="学生登录", font=tkFont.Font(size=16), command=lambda: controller.show_frame("StudentPage"), width=30, height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+        Button(self, text='退出系统', height=2, font=tkFont.Font(size=16), width=30, command=controller.quit, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
 
-        Button(self.window, text="管理员登录", font=tkFont.Font(size=16), command=lambda: AdminPage(self.window), width=30,
-               height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
-        Button(self.window, text="学生登录", font=tkFont.Font(size=16), command=lambda: StudentPage(self.window), width=30,
-               height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
-        Button(self.window, text='退出系统', height=2, font=tkFont.Font(size=16), width=30, command=self.window.destroy,
-               fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+        label = tk.Label(self, text='管理员登陆', bg='white', font=('Verdana', 20), width=30, height=2)
+        label.pack()
 
-        self.window.mainloop()  # 主消息循环
+        Label(self, text='管理员账号：', font=tkFont.Font(size=14)).pack(pady=25)
+        self.admin_username = tk.Entry(self, width=30, font=tkFont.Font(size=14), bg='Ivory')
+        self.admin_username.pack()
+
+        Label(self, text='管理员密码：', font=tkFont.Font(size=14)).pack(pady=25)
+        self.admin_pass = tk.Entry(self, width=30, font=tkFont.Font(size=14), bg='Ivory', show='*')
+        self.admin_pass.pack()
+
+        Button(self, text="登陆", width=8, font=tkFont.Font(size=12), command=self.login).pack(pady=40)
+        Button(self, text="返回首页", width=8, font=tkFont.Font(size=12), command=lambda: controller.show_frame("StartPage")).pack()
+
+    def login(self):
+        admin_pass = None
+
+        # 数据库操作 查询管理员表
+        db = pymysql.connect(host="localhost", user="root", password="a1596s1596", database="school", port=3306)
+        cursor = db.cursor()
+        sql = "SELECT * FROM admin_login WHERE admin_id = '%s'" % (self.admin_username.get())
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            for row in results:
+                admin_id = row[0]
+                admin_pass = row[1]
+        except:
+            messagebox.showinfo('警告！', '用户名或密码不正确！')
+        db.close()
+
+        if self.admin_pass.get() == admin_pass:
+            self.controller.show_frame("AdminManage")
+        else:
+            messagebox.showinfo('警告！', '用户名或密码不正确！')
 
 
 # 管理员登陆页面
-class AdminPage:
-    def __init__(self, parent_window):
-        parent_window.destroy()  # 销毁主界面
+class AdminPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
 
-        self.window = tk.Tk()  # 初始框的声明
-        self.window.title('管理员登陆页面')
-        self.window.geometry('1920x1080')  # 这里的乘是小x
-
-        label = tk.Label(self.window, text='管理员登陆', bg='white', font=('Verdana', 20), width=30, height=2)
+        label = tk.Label(self, text='管理员登陆', bg='white', font=('Verdana', 20), width=30, height=2)
         label.pack()
 
-        Label(self.window, text='管理员账号：', font=tkFont.Font(size=14)).pack(pady=25)
-        self.admin_username = tk.Entry(self.window, width=30, font=tkFont.Font(size=14), bg='Ivory')
+        Label(self, text='管理员账号：', font=tkFont.Font(size=14)).pack(pady=25)
+        self.admin_username = tk.Entry(self, width=30, font=tkFont.Font(size=14), bg='Ivory')
         self.admin_username.pack()
 
-        Label(self.window, text='管理员密码：', font=tkFont.Font(size=14)).pack(pady=25)
-        self.admin_pass = tk.Entry(self.window, width=30, font=tkFont.Font(size=14), bg='Ivory', show='*')
+        Label(self, text='管理员密码：', font=tkFont.Font(size=14)).pack(pady=25)
+        self.admin_pass = tk.Entry(self, width=30, font=tkFont.Font(size=14), bg='Ivory', show='*')
         self.admin_pass.pack()
 
-        Button(self.window, text="登陆", width=8, font=tkFont.Font(size=12), command=self.login).pack(pady=40)
-        Button(self.window, text="返回首页", width=8, font=tkFont.Font(size=12), command=self.back).pack()
-
-        self.window.protocol("WM_DELETE_WINDOW", self.back)  # 捕捉右上角关闭点击
-        self.window.mainloop()  # 进入消息循环
+        Button(self, text="登陆", width=8, font=tkFont.Font(size=12), command=self.login).pack(pady=40)
+        Button(self, text="返回首页", width=8, font=tkFont.Font(size=12), command=lambda: controller.show_frame("StartPage")).pack()
 
     def login(self):
         print(str(self.admin_username.get()))
@@ -59,40 +109,67 @@ class AdminPage:
         admin_pass = None
 
         # 数据库操作 查询管理员表
-        # 打开数据库连接 autocommit为自动连接参数
         db = pymysql.connect(host="localhost", user="root", password="a1596s1596", database="school", port=3306)
-        cursor = db.cursor()  # 使用cursor()方法获取操作游标
-        sql = "SELECT * FROM admin_login WHERE admin_id = '%s'" % (self.admin_username.get())  # SQL 查询语句
+        cursor = db.cursor()
+        sql = "SELECT * FROM admin_login WHERE admin_id = '%s'" % (self.admin_username.get())
         try:
-            # 执行SQL语句
             cursor.execute(sql)
-            # 获取所有记录列表
             results = cursor.fetchall()
             for row in results:
                 admin_id = row[0]
                 admin_pass = row[1]
-                # 打印结果
-                print("admin_id=%s,admin_pass=%s" % (admin_id, admin_pass))
         except:
-            print("Error: unable to fetch data")
             messagebox.showinfo('警告！', '用户名或密码不正确！')
-        db.close()  # 关闭数据库连接
-
-        print("正在登陆管理员管理界面")
-        print("self", self.admin_pass)
-        print("local", admin_pass)
+        db.close()
 
         if self.admin_pass.get() == admin_pass:
-            AdminManage(self.window)  # 进入管理员操作界面
+            self.controller.show_frame("AdminManage")
         else:
             messagebox.showinfo('警告！', '用户名或密码不正确！')
 
-    def back(self):
-        StartPage(self.window)  # 显示主窗口 销毁本窗口
-
 
 # 学生登陆页面
-class StudentPage:
+class StudentPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        label = tk.Label(self, text='学生登陆', bg='white', font=('Verdana', 20), width=30, height=2)
+        label.pack()
+
+        Label(self, text='学生账号：', font=tkFont.Font(size=14)).pack(pady=25)
+        self.student_id = tk.Entry(self, width=30, font=tkFont.Font(size=14), bg='Ivory')
+        self.student_id.pack()
+
+        Label(self, text='学生密码：', font=tkFont.Font(size=14)).pack(pady=25)
+        self.student_pass = tk.Entry(self, width=30, font=tkFont.Font(size=14), bg='Ivory', show='*')
+        self.student_pass.pack()
+
+        Button(self, text="登陆", width=8, font=tkFont.Font(size=12), command=self.login).pack(pady=40)
+        Button(self, text="返回首页", width=8, font=tkFont.Font(size=12), command=lambda: controller.show_frame("StartPage")).pack()
+
+    def login(self):
+        print(str(self.student_id.get()))
+        print(str(self.student_pass.get()))
+        stu_pass = None
+
+        db = pymysql.connect(host="localhost", user="root", password="a1596s1596", database="school", port=3306)
+        cursor = db.cursor()
+        sql = "SELECT * FROM student_login WHERE stu_id = '%s'" % (self.student_id.get())
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            for row in results:
+                stu_id = row[0]
+                stu_pass = row[1]
+        except:
+            messagebox.showinfo('警告！', '用户名或密码不正确！')
+        db.close()
+
+        if self.student_pass.get() == stu_pass:
+            self.controller.show_frame("StudentView")
+        else:
+            messagebox.showinfo('警告！', '用户名或密码不正确！')
     def __init__(self, parent_window):
         parent_window.destroy()  # 销毁主界面
 
@@ -157,7 +234,20 @@ class StudentPage:
 
 
 # 管理员操作界面
-class AdminManage:
+class AdminManage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        label = Label(self, text="请选择操作", font=("Verdana", 20))
+        label.pack(pady=100)
+
+        Button(self, text="学生选课信息", font=tkFont.Font(size=16), command=lambda: controller.show_frame("Student"), width=30, height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+        Button(self, text="教师信息", font=tkFont.Font(size=16), command=lambda: controller.show_frame("Teacher"), width=30, height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+        Button(self, text="课程信息", font=tkFont.Font(size=16), command=lambda: controller.show_frame("Lesson"), width=30, height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+        Button(self, text="选课信息", font=tkFont.Font(size=16), command=lambda: controller.show_frame("Learn"), width=30, height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+        Button(self, text="授课信息", font=tkFont.Font(size=16), command=lambda: controller.show_frame("Teach"), width=30, height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
+        Button(self, text='退出系统', height=2, font=tkFont.Font(size=16), width=30, command=controller.quit, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
     def __init__(self, parent_window):
         parent_window.destroy()  # 销毁子界面,从别处返回后销毁原界面
 
@@ -271,7 +361,7 @@ class Student:
         self.right_top_gender_label.grid(row=3, column=0)  # 位置设置
         self.right_top_gender_entry.grid(row=3, column=1)
         # 学院
-        self.right_top_gender_label = Label(self.frame_left_top, text="成绩：", font=('Verdana', 15))
+        self.right_top_gender_label = Label(self.frame_left_top, text="学院：", font=('Verdana', 15))
         self.right_top_gender_entry = Entry(self.frame_left_top, textvariable=self.var_college,font=('Verdana', 15))
         self.right_top_gender_label.grid(row=4, column=0)  # 位置设置
         self.right_top_gender_entry.grid(row=4, column=1)
@@ -1023,8 +1113,7 @@ class StudentView:
 
 if __name__ == '__main__':
     try:
-        # 实例化Application
-        window = tk.Tk()
-        StartPage(window)
+        app = MainApp()
+        app.mainloop()
     except:
         messagebox.showinfo('错误！', '连接数据库失败！')
