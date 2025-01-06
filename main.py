@@ -170,8 +170,6 @@ class AdminManage:
 
         Button(self.window, text="学生选课信息", font=tkFont.Font(size=16), command=lambda: Student(self.window), width=30,
                height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
-        Button(self.window, text="教师信息", font=tkFont.Font(size=16), command=lambda: Teacher(self.window), width=30,
-               height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
         Button(self.window, text="课程信息", font=tkFont.Font(size=16), command=lambda: Lesson(self.window), width=30,
                height=2, fg='white', bg='gray', activebackground='black', activeforeground='white').pack()
         Button(self.window, text="选课信息", font=tkFont.Font(size=16), command=lambda: Learn(self.window), width=30,
@@ -1290,4 +1288,3 @@ if __name__ == '__main__':
         StartPage(window)
     except:
         messagebox.showinfo('错误！', '连接数据库失败！')
-
