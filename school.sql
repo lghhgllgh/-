@@ -11,7 +11,7 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 06/01/2025 23:42:39
+ Date: 06/01/2025 23:54:39
 */
 
 SET NAMES utf8mb4;
@@ -218,41 +218,6 @@ INSERT INTO `student_login` VALUES ('00003', '123456');
 INSERT INTO `student_login` VALUES ('00004', '123456');
 INSERT INTO `student_login` VALUES ('00005', '123456');
 INSERT INTO `student_login` VALUES ('98725', '123456');
-
--- ----------------------------
--- Table structure for teach
--- ----------------------------
-DROP TABLE IF EXISTS `teach`;
-CREATE TABLE `teach`  (
-  `tea_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `lesson_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `end_way` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `class` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`tea_id`, `lesson_id`) USING BTREE,
-  INDEX `les`(`lesson_id` ASC) USING BTREE,
-  CONSTRAINT `les` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`lesson_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tea` FOREIGN KEY (`tea_id`) REFERENCES `teacher` (`tea_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of teach
--- ----------------------------
-INSERT INTO `teach` VALUES ('01001', '001', '闭卷', 'A1');
-INSERT INTO `teach` VALUES ('01001', '012', '闭卷', 'A1');
-INSERT INTO `teach` VALUES ('01002', '002', '闭卷', 'B2');
-INSERT INTO `teach` VALUES ('01015', '003', '闭卷', 'C3');
-INSERT INTO `teach` VALUES ('02003', '004', '开卷', 'A2');
-INSERT INTO `teach` VALUES ('02003', '008', '开卷', 'A2');
-INSERT INTO `teach` VALUES ('02003', '010', '无期末考试', 'A2');
-INSERT INTO `teach` VALUES ('02004', '006', '论文', 'C3');
-INSERT INTO `teach` VALUES ('02005', '005', '展示', 'Q1');
-INSERT INTO `teach` VALUES ('03006', '007', '闭卷', 'W2');
-INSERT INTO `teach` VALUES ('03007', '008', '开卷', 'E3');
-INSERT INTO `teach` VALUES ('03008', '009', '通过制', 'S2');
-INSERT INTO `teach` VALUES ('04009', '010', '开卷', 'T5');
-INSERT INTO `teach` VALUES ('04010', '011', '闭卷', 'X3');
-INSERT INTO `teach` VALUES ('04011', '012', '论文', 'I2');
-INSERT INTO `teach` VALUES ('05013', '015', '平时成绩', 'P0');
 
 -- ----------------------------
 -- Table structure for teacher
