@@ -11,7 +11,7 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 06/01/2025 23:54:39
+ Date: 07/01/2025 01:08:09
 */
 
 SET NAMES utf8mb4;
@@ -48,42 +48,9 @@ CREATE TABLE `college`  (
 -- ----------------------------
 -- Records of college
 -- ----------------------------
-INSERT INTO `college` VALUES ('人工智能学院', '01015');
-INSERT INTO `college` VALUES ('电子信息与光学工程学院', '02003');
-INSERT INTO `college` VALUES ('网络空间安全学院', '03008');
-INSERT INTO `college` VALUES ('软件学院', '05014');
+INSERT INTO `college` VALUES ('船舶工程学院', '01');
 INSERT INTO `college` VALUES ('计算机科学与技术学院', '06');
-
--- ----------------------------
--- Table structure for graduatestudent
--- ----------------------------
-DROP TABLE IF EXISTS `graduatestudent`;
-CREATE TABLE `graduatestudent`  (
-  `stu_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `stu_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `stu_gender` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `stu_adm_time` date NOT NULL,
-  `stu_college` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `tea_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `study` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  PRIMARY KEY (`stu_id`) USING BTREE,
-  INDEX `gs_in_col`(`stu_college` ASC) USING BTREE,
-  INDEX `teached_by`(`tea_id` ASC) USING BTREE,
-  INDEX `gs_in_stuname`(`stu_name` ASC) USING BTREE,
-  INDEX `gs_in_stuadm`(`stu_adm_time` ASC) USING BTREE,
-  CONSTRAINT `gs_in_col` FOREIGN KEY (`stu_college`) REFERENCES `college` (`col_name`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `gs_in_stuadm` FOREIGN KEY (`stu_adm_time`) REFERENCES `student` (`stu_adm_time`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `gs_in_stuid` FOREIGN KEY (`stu_id`) REFERENCES `student` (`stu_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `gs_in_stuname` FOREIGN KEY (`stu_name`) REFERENCES `student` (`stu_name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `teached_by` FOREIGN KEY (`tea_id`) REFERENCES `teacher` (`tea_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of graduatestudent
--- ----------------------------
-INSERT INTO `graduatestudent` VALUES ('00001', '张三', '男', '2020-09-11', '网络空间安全学院', '03008', '计算机病毒');
-INSERT INTO `graduatestudent` VALUES ('00002', '李凤', '女', '2020-09-11', '软件学院', '05014', '软件工程');
-INSERT INTO `graduatestudent` VALUES ('00005', '王麻', '男', '2021-09-13', '电子信息与光学工程学院', '02003', '光导纤维');
+INSERT INTO `college` VALUES ('信息与通信工程学院', '08');
 
 -- ----------------------------
 -- Table structure for learn
@@ -103,17 +70,18 @@ CREATE TABLE `learn`  (
 -- ----------------------------
 -- Records of learn
 -- ----------------------------
-INSERT INTO `learn` VALUES ('00001', '001', 96, 'C126/A304');
-INSERT INTO `learn` VALUES ('00001', '002', 92, 'B202/A308');
-INSERT INTO `learn` VALUES ('00001', '003', 95, 'C420');
-INSERT INTO `learn` VALUES ('00001', '009', NULL, NULL);
-INSERT INTO `learn` VALUES ('00002', '004', 99, 'B420/A205');
-INSERT INTO `learn` VALUES ('00003', '005', 88, 'B402/A203');
+INSERT INTO `learn` VALUES ('00001', '001', 96, 'C126');
+INSERT INTO `learn` VALUES ('00001', '002', 92, '21B2012');
+INSERT INTO `learn` VALUES ('00001', '003', 95, '21B3106');
+INSERT INTO `learn` VALUES ('00001', '009', 91, '11#4082');
+INSERT INTO `learn` VALUES ('00002', '004', 99, 'B420');
+INSERT INTO `learn` VALUES ('00003', '005', 88, 'B402');
 INSERT INTO `learn` VALUES ('00003', '009', 94, 'E201');
-INSERT INTO `learn` VALUES ('00004', '006', 87, 'B502/A205');
-INSERT INTO `learn` VALUES ('00005', '007', 91, '羽毛球馆');
-INSERT INTO `learn` VALUES ('98725', '008', 98, 'B531/A315');
-INSERT INTO `learn` VALUES ('98725', '015', 77, 'A34');
+INSERT INTO `learn` VALUES ('00004', '006', 87, 'B502');
+INSERT INTO `learn` VALUES ('00005', '007', 91, '体育馆');
+INSERT INTO `learn` VALUES ('00006', '008', 98, 'B531');
+INSERT INTO `learn` VALUES ('00006', '009', 90, '21B5086');
+INSERT INTO `learn` VALUES ('00006', '012', 77, 'A34');
 
 -- ----------------------------
 -- Table structure for lesson
@@ -132,43 +100,16 @@ CREATE TABLE `lesson`  (
 -- ----------------------------
 INSERT INTO `lesson` VALUES ('001', '数据库系统', '3', '17');
 INSERT INTO `lesson` VALUES ('002', '计算机组成原理', '3', '17');
-INSERT INTO `lesson` VALUES ('003', '计算方法', '2', '17');
+INSERT INTO `lesson` VALUES ('003', '计算思维', '2', '17');
 INSERT INTO `lesson` VALUES ('004', '嵌入式系统', '3.5', '17');
 INSERT INTO `lesson` VALUES ('005', '人工智能导论', '2', '17');
 INSERT INTO `lesson` VALUES ('006', '算法导论', '3.5', '17');
-INSERT INTO `lesson` VALUES ('007', '羽毛球初级', '2', '16');
-INSERT INTO `lesson` VALUES ('008', '软件安全', '3', '17');
+INSERT INTO `lesson` VALUES ('007', '羽毛球', '2', '16');
+INSERT INTO `lesson` VALUES ('008', '软件工程', '3', '17');
 INSERT INTO `lesson` VALUES ('009', '高级英语', '2', '17');
 INSERT INTO `lesson` VALUES ('010', '信息安全', '3', '17');
 INSERT INTO `lesson` VALUES ('011', '毛概', '3', '17');
-INSERT INTO `lesson` VALUES ('015', '音乐鉴赏', '1', '9');
-
--- ----------------------------
--- Table structure for major
--- ----------------------------
-DROP TABLE IF EXISTS `major`;
-CREATE TABLE `major`  (
-  `maj_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `maj_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `train_way` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `col_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`maj_id`) USING BTREE,
-  INDEX `maj_in_col`(`col_name` ASC) USING BTREE,
-  CONSTRAINT `maj_in_col` FOREIGN KEY (`col_name`) REFERENCES `college` (`col_name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of major
--- ----------------------------
-INSERT INTO `major` VALUES ('08001K', '信息安全', '学习计算机病毒', '网络空间安全学院');
-INSERT INTO `major` VALUES ('08002K', '软件工程', '学习软件工程', '软件学院');
-INSERT INTO `major` VALUES ('08003K', '计算机科学与技术', '学习电脑', '计算机学院');
-INSERT INTO `major` VALUES ('08004K', '电子科学与技术', '学习芯片', '电子信息与光学工程学院');
-INSERT INTO `major` VALUES ('08005K', '自动化', '学习机器人', '人工智能学院');
-INSERT INTO `major` VALUES ('08006K', '物联网工程', '学习物联网', '网络空间安全学院');
-INSERT INTO `major` VALUES ('08007K', '软件安全', '学习软件防护', '软件学院');
-INSERT INTO `major` VALUES ('08008K', '通信工程', '学习通信', '电子信息与光学工程学院');
-INSERT INTO `major` VALUES ('08009K', '智能科学', '学习智能科学与技术', '人工智能学院');
+INSERT INTO `lesson` VALUES ('012', '音乐鉴赏', '1', '9');
 
 -- ----------------------------
 -- Table structure for student
@@ -191,12 +132,12 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES ('00001', '张三', '男', '2020-09-11', '网络空间安全学院');
-INSERT INTO `student` VALUES ('00002', '李凤', '女', '2020-09-11', '软件学院');
-INSERT INTO `student` VALUES ('00003', '刘二', '男', '2021-09-13', '计算机学院');
-INSERT INTO `student` VALUES ('00004', '赵四', '女', '2021-09-13', '人工智能学院');
-INSERT INTO `student` VALUES ('00005', '王麻', '男', '2021-09-13', '电子信息与光学工程学院');
-INSERT INTO `student` VALUES ('98725', '张蛋', '男', '2019-09-10', '网络空间安全学院');
+INSERT INTO `student` VALUES ('00001', '张三', '男', '2020-09-11', '计算机科学与技术学院');
+INSERT INTO `student` VALUES ('00002', '李四', '女', '2020-09-11', '船舶工程学院');
+INSERT INTO `student` VALUES ('00003', '刘二', '男', '2021-09-12', '计算机科学与技术学院');
+INSERT INTO `student` VALUES ('00004', '赵六', '女', '2021-09-12', '船舶工程学院');
+INSERT INTO `student` VALUES ('00005', '王五', '男', '2021-09-12', '信息与通信工程学院');
+INSERT INTO `student` VALUES ('00006', '小明', '男', '2019-09-10', '计算机科学与技术学院');
 
 -- ----------------------------
 -- Table structure for student_login
@@ -217,101 +158,7 @@ INSERT INTO `student_login` VALUES ('00002', '123456');
 INSERT INTO `student_login` VALUES ('00003', '123456');
 INSERT INTO `student_login` VALUES ('00004', '123456');
 INSERT INTO `student_login` VALUES ('00005', '123456');
-INSERT INTO `student_login` VALUES ('98725', '123456');
-
--- ----------------------------
--- Table structure for teacher
--- ----------------------------
-DROP TABLE IF EXISTS `teacher`;
-CREATE TABLE `teacher`  (
-  `tea_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `tea_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `tea_title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `tea_college` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`tea_id`) USING BTREE,
-  INDEX `tea_in_col`(`tea_college` ASC) USING BTREE,
-  CONSTRAINT `tea_in_col` FOREIGN KEY (`tea_college`) REFERENCES `college` (`col_name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of teacher
--- ----------------------------
-INSERT INTO `teacher` VALUES ('01001', '冯浩', '讲师', '人工智能学院');
-INSERT INTO `teacher` VALUES ('01002', '李布林', '教授', '人工智能学院');
-INSERT INTO `teacher` VALUES ('01015', '鲁智深', '辅导员', '人工智能学院');
-INSERT INTO `teacher` VALUES ('02003', '马超', '副教授', '电子信息与光学工程学院');
-INSERT INTO `teacher` VALUES ('02004', '杜珂', '讲师', '电子信息与光学工程学院');
-INSERT INTO `teacher` VALUES ('02005', '刘备', '实验师', '电子信息与光学工程学院');
-INSERT INTO `teacher` VALUES ('03006', '赵云', '讲师', '网络空间安全学院');
-INSERT INTO `teacher` VALUES ('03007', '关羽', '实验员', '网络空间安全学院');
-INSERT INTO `teacher` VALUES ('03008', '公孙离', '教授', '网络空间安全学院');
-INSERT INTO `teacher` VALUES ('04009', '崔不理', '讲师', '计算机学院');
-INSERT INTO `teacher` VALUES ('04010', '司徒全蛋', '操作员', '计算机学院');
-INSERT INTO `teacher` VALUES ('04011', '姜维', '教授', '计算机学院');
-INSERT INTO `teacher` VALUES ('05012', '董卓', '讲师', '软件学院');
-INSERT INTO `teacher` VALUES ('05013', '貂蝉', '秘书长', '软件学院');
-INSERT INTO `teacher` VALUES ('05014', '林冲', '教授', '软件学院');
-
--- ----------------------------
--- Table structure for teacher_login
--- ----------------------------
-DROP TABLE IF EXISTS `teacher_login`;
-CREATE TABLE `teacher_login`  (
-  `tea_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `tea_pwd` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  PRIMARY KEY (`tea_id`) USING BTREE,
-  CONSTRAINT `tea_login` FOREIGN KEY (`tea_id`) REFERENCES `teacher` (`tea_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of teacher_login
--- ----------------------------
-INSERT INTO `teacher_login` VALUES ('01001', '123456');
-INSERT INTO `teacher_login` VALUES ('01002', '123456');
-INSERT INTO `teacher_login` VALUES ('01015', '123456');
-INSERT INTO `teacher_login` VALUES ('02003', '123456');
-INSERT INTO `teacher_login` VALUES ('02004', '123456');
-INSERT INTO `teacher_login` VALUES ('02005', '123456');
-INSERT INTO `teacher_login` VALUES ('03006', '123456');
-INSERT INTO `teacher_login` VALUES ('03007', '123456');
-INSERT INTO `teacher_login` VALUES ('03008', '123456');
-INSERT INTO `teacher_login` VALUES ('04009', '123456');
-INSERT INTO `teacher_login` VALUES ('04010', '123456');
-INSERT INTO `teacher_login` VALUES ('04011', '123456');
-INSERT INTO `teacher_login` VALUES ('05012', '123456');
-INSERT INTO `teacher_login` VALUES ('05013', '123456');
-INSERT INTO `teacher_login` VALUES ('05014', '123456');
-
--- ----------------------------
--- Table structure for undergraduate
--- ----------------------------
-DROP TABLE IF EXISTS `undergraduate`;
-CREATE TABLE `undergraduate`  (
-  `stu_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `stu_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `stu_gender` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `stu_adm_time` date NOT NULL,
-  `stu_college` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `major_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `class` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  PRIMARY KEY (`stu_id`) USING BTREE,
-  INDEX `ug_in_col`(`stu_college` ASC) USING BTREE,
-  INDEX `ug_learn_maj`(`major_id` ASC) USING BTREE,
-  INDEX `ug_in_stuname`(`stu_name` ASC) USING BTREE,
-  INDEX `ug_in_stuadm`(`stu_adm_time` ASC) USING BTREE,
-  CONSTRAINT `ug_in_col` FOREIGN KEY (`stu_college`) REFERENCES `college` (`col_name`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `ug_in_stuadm` FOREIGN KEY (`stu_adm_time`) REFERENCES `student` (`stu_adm_time`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `ug_in_stuid` FOREIGN KEY (`stu_id`) REFERENCES `student` (`stu_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `ug_in_stuname` FOREIGN KEY (`stu_name`) REFERENCES `student` (`stu_name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `ug_learn_maj` FOREIGN KEY (`major_id`) REFERENCES `major` (`maj_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of undergraduate
--- ----------------------------
-INSERT INTO `undergraduate` VALUES ('00003', '刘二', '男', '2021-09-13', '计算机学院', '08003K', '1');
-INSERT INTO `undergraduate` VALUES ('00004', '赵四', '女', '2021-09-13', '人工智能学院', '08009K', '3');
-INSERT INTO `undergraduate` VALUES ('98725', '张蛋', '男', '2019-09-10', '网络空间安全学院', '08001K', '5');
+INSERT INTO `student_login` VALUES ('00006', '123456');
 
 -- ----------------------------
 -- View structure for stu_les
