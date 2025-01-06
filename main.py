@@ -832,7 +832,7 @@ class Learn:
     def tree_sort_column(self, tv, col, reverse):  # Treeview、列名、排列方式
         l = [(tv.set(k, col), k) for k in tv.get_children('')]
         l.sort(reverse=reverse)  # 排序方式
-        # rearrange items in sorted positions
+        #rearrange items in sorted positions
         for index, (val, k) in enumerate(l):  # 根据排序后索引移动
             tv.move(k, '', index)
         tv.heading(col, command=lambda: self.tree_sort_column(tv, col, not reverse))  # 重写标题，使之成为再点倒序的标题
@@ -841,42 +841,19 @@ class Learn:
         print('123')
         print(self.var_id.get())
         print(self.id)
-        #if str(self.var_id.get()) in self.id and str(self.var_les.get()) == self.les[self.id.index(self.var_id.get())]:
-            #messagebox.showinfo('警告！', '该学生已选过此课程！')
-        #else:
-        stu_id = [] # 所有学生
-        les_id = [] # 开设的所有课程
-        lesed_id = [] # 有人教的课
+        if str(self.var_id.get()) in self.id and str(self.var_les.get()) == self.les[self.id.index(self.var_id.get())]:
+            messagebox.showinfo('警告！', '该学生已选过此课程！')
+        else:
+            stu_id = [] # 所有学生
+            les_id = [] # 开设的所有课程
+            lesed_id = [] # 有人教的课
         db = pymysql.connect(host="localhost", user="root", password="a1596s1596", database="school", port=3306)
         cursor = db.cursor()  # 使用cursor()方法获取操作游标
 
-        sql1 = "SELECT stu_id FROM student"
-        cursor.execute(sql1)
-        results = cursor.fetchall()
-        for row in results:
-            stu_id.append(row[0])
-
-        sql2 = "SELECT lesson_id FROM lesson"
-        cursor.execute(sql2)
-        results = cursor.fetchall()
-        for row in results:
-            les_id.append(row[0])
-
-        sql3 = "SELECT lesson_id FROM teach"
-        cursor.execute(sql3)
-        results = cursor.fetchall()
-        for row in results:
-            lesed_id.append(row[0])
-        db.close()
 
         if self.var_id.get() == '' or self.var_les.get() == '':
             messagebox.showinfo('警告！', '请输入必要的选课信息')
         else:
-            if self.var_id.get() not in stu_id or self.var_les.get() not in les_id:
-                messagebox.showinfo('警告！', '该学生或该课程不存在！')
-            elif self.var_les.get() not in lesed_id:
-                messagebox.showinfo('警告！', '尚无人开此课程！')
-            else:
                 # 打开数据库连接
                 db = pymysql.connect(host="localhost", user="root", password="a1596s1596", database="school", port=3306)
                 cursor = db.cursor()  # 使用cursor()方法获取操作游标
@@ -975,14 +952,15 @@ class StudentView:
         for widget in self.window.winfo_children():
             widget.destroy()
 
-        label = tk.Label(self.window, text='学生信息查看', bg='green', font=('Verdana', 20), width=30, height=2)
+        label = tk.Label(self.window, text='学生信息查看', bg='white', font=('Verdana', 20), width=30, height=2)
         label.pack(pady=20)
 
         self.id = '学号:' + ''
         self.name = '姓名:' + ''
         self.gender = '性别:' + ''
-        self.adm_time = '入学时间' + ''
         self.college = '学院:' + ''
+        self.adm_time = '入学时间' + ''
+        
         # 打开数据库连接
         db = pymysql.connect(host="localhost", user="root", password="a1596s1596", database="school", port=3306)
         cursor = db.cursor()  # 使用cursor()方法获取操作游标
@@ -996,8 +974,9 @@ class StudentView:
                 self.id = '学号:' + row[0]
                 self.name = '姓名:' + row[1]
                 self.gender = '性别:' + row[2]
-                self.adm_time = '入学时间:' + str(row[3])
-                self.college = '学院:' + row[4]
+                self.college = '学院:' + row[3]
+                self.adm_time = '入学时间:' + str(row[4])
+                
         except:
             print("Error: unable to fetch data")
         db.close()  # 关闭数据库连接
